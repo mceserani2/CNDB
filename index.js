@@ -3,6 +3,7 @@ import sqlite from "sqlite3";
 
 const db = new sqlite.Database("cndb.db");
 await createTable();
+main();
 
 async function main() {
     const menu = [
@@ -34,9 +35,51 @@ async function main() {
             await vediBarzellette();
             await main();
             break;
-        case "esci":
+        case "Esci":
             console.log("Goodbye!");
     }
+}
+
+async function vediBarzellette() {
+    return new Promise((resolve, reject) => {
+        db.all(`SELECT * FROM Joke`, (err, rows) => {
+            if (err)                
+                reject(err);
+            else {
+                rows.forEach(row => {
+                    console.log(`ID: ${row.Id}\nDomanda: ${row.question}\nRisposte: ${row.answers}\nRisposta Corretta: ${row.ans}\n`);
+                });
+                resolve();
+            }
+        });
+    });
+}
+
+async function eliminaBarzelletta() {
+    const id = await inquirer.prompt({
+        type: "input",
+        name: "id", 
+        message: "Inserisci l'ID della barzelletta da eliminare:",
+        validate: (input) => {
+            const num = parseInt(input);
+            return !isNaN(num) || "Devi inserire un numero valido.";
+        }
+    });
+
+    return new Promise((resolve, reject) => {
+        db.run(`DELETE FROM Joke WHERE Id = ?`, [id.id], function (err) {
+            if (err)
+                reject(err);
+            else {
+                if (this.changes > 0) {
+                    console.log("Barzelletta eliminata con successo!"); 
+                } else {
+                    console.log("Nessuna barzelletta trovata con l'ID fornito.");
+                }
+                resolve();
+            }
+        });
+    });
 }
 
 async function aggiungiBarzelletta() {
@@ -86,11 +129,13 @@ async function aggiungiBarzelletta() {
 
 function createTable() {
     return new Promise((resolve, reject) => {
-        db.run(`CREATE TABLE IF NOT EXISTS Joke (
-                    Id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
-                    question TEXT NOT NULL,
-                    answers TEXT NOT NULL,
-                    ans INTEGER NOT NULL)`,(err) => {
+        db.run(`CREATE TABLE IF NOT EXISTS "Joke" (
+                    "Id"	INTEGER NOT NULL,
+                    "question"	TEXT NOT NULL,
+                    "answers"	TEXT NOT NULL,
+                    "ans"	INTEGER NOT NULL,
+                    PRIMARY KEY("Id" AUTOINCREMENT)
+                );`,(err) => {
                         if (err)
                             reject(err);
                         else
