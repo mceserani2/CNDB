@@ -10,6 +10,8 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "inquirer": "^8.2.6",
     "sqlite3": "^6.0.1"
   }
