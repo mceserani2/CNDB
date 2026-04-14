@@ -1,0 +1,16 @@
+{
+  "name": "cndb",
+  "version": "1.0.0",
+  "description": "Chuck Norris DB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matteo Ceserani",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "inquirer": "^13.4.1",
+    "sqlite3": "^6.0.1"
+  }
+}
